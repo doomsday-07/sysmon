@@ -9,6 +9,9 @@ description = "Lightweight cross-platform system monitor"
 requires-python = ">=3.9"
 license = "MIT"
 
+[project.optional-dependencies]
+dev = ["pyinstaller>=6.0"]
+
 [project.scripts]
 sysmon = "sysmon_py.__main__:main"
 

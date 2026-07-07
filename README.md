@@ -14,6 +14,27 @@ Lightweight cross-platform system monitor CLI. Shows CPU, memory, disk, temperat
 
 ## Installation
 
+### Pre-built Binaries (no Python required)
+
+Download the latest binary for your platform from [GitHub Releases](https://github.com/shadow/sysmon/releases):
+
+| Platform | Archive |
+|----------|---------|
+| macOS (Intel + Apple Silicon) | `sysmon-macos-universal2.tar.gz` |
+| Linux (x86_64) | `sysmon-linux-x86_64.tar.gz` |
+| Windows (x86_64) | `sysmon-windows-x86_64.zip` |
+
+```bash
+# macOS / Linux
+tar -xzf sysmon-macos-universal2.tar.gz
+cd sysmon && ./sysmon
+
+# Windows
+# Extract the .zip and run sysmon.exe from the extracted folder
+```
+
+### From Source (requires Python 3.9+)
+
 ```bash
 pip install .
 ```
@@ -21,12 +42,13 @@ pip install .
 Or for development:
 
 ```bash
-pip install -e .
+pip install -e ".[dev]"
+make build    # build binary via PyInstaller
 ```
 
 ### Requirements
 
-- Python 3.9+
+- Python 3.9+ (only when installing from source)
 - No external packages needed
 
 ## Usage
