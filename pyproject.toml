@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sysmon"
+version = "0.1.0"
+description = "Lightweight cross-platform system monitor"
+requires-python = ">=3.9"
+license = "MIT"
+
+[project.scripts]
+sysmon = "sysmon_py.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["sysmon_py*"]

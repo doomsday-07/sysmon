@@ -1,0 +1,19 @@
+# Python
+*.pyc
+__pycache__/
+*.egg-info/
+build/
+dist/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
