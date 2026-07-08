@@ -18,19 +18,24 @@ Lightweight cross-platform system monitor CLI. Shows CPU, memory, disk, temperat
 
 Download the latest binary for your platform from [GitHub Releases](https://github.com/shadow/sysmon/releases):
 
-| Platform | Archive |
-|----------|---------|
-| macOS (Intel + Apple Silicon) | `sysmon-macos-universal2.tar.gz` |
-| Linux (x86_64) | `sysmon-linux-x86_64.tar.gz` |
-| Windows (x86_64) | `sysmon-windows-x86_64.zip` |
+| Platform | File | Size |
+|----------|------|------|
+| macOS (.app bundle) | `sysmon-macos.tar.gz` | ~3.7 MB |
+| Linux (.deb package) | `sysmon-linux.deb` | ~3.5 MB |
+| Windows (.exe) | `sysmon-windows.zip` | ~3.5 MB |
 
 ```bash
-# macOS / Linux
-tar -xzf sysmon-macos-universal2.tar.gz
-cd sysmon && ./sysmon
+# macOS — extract and run the .app
+tar -xzf sysmon-macos.tar.gz
+open sysmon.app
+# Or directly: sysmon.app/Contents/MacOS/sysmon
 
-# Windows
-# Extract the .zip and run sysmon.exe from the extracted folder
+# Linux — install the .deb
+sudo dpkg -i sysmon-linux.deb
+sysmon
+
+# Windows — extract and run sysmon.exe
+# Extract the .zip and run sysmon.exe
 ```
 
 ### From Source (requires Python 3.9+)
@@ -43,7 +48,9 @@ Or for development:
 
 ```bash
 pip install -e ".[dev]"
-make build    # build binary via PyInstaller
+make build       # build single-file binary
+make build-app   # build macOS .app bundle
+make build-deb   # build Linux .deb package
 ```
 
 ### Requirements

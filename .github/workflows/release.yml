@@ -14,14 +14,11 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            artifact_name: sysmon-macos-universal2
-            archive_name: sysmon-macos-universal2.tar.gz
+            artifact_name: sysmon-macos
           - os: ubuntu-latest
-            artifact_name: sysmon-linux-x86_64
-            archive_name: sysmon-linux-x86_64.tar.gz
+            artifact_name: sysmon-linux
           - os: windows-latest
-            artifact_name: sysmon-windows-x86_64
-            archive_name: sysmon-windows-x86_64.zip
+            artifact_name: sysmon-windows
 
     runs-on: ${{ matrix.os }}
 
@@ -36,23 +33,42 @@ jobs:
       - name: Install dependencies
         run: pip install pyinstaller
 
-      - name: Build binary
-        run: pyinstaller --noconfirm sysmon.spec
+      # ── macOS: .app bundle ──
+      - name: Build .app bundle (macOS)
+        if: runner.os == 'macOS'
+        run: bash scripts/build-app.sh ${GITHUB_REF_NAME#v}
 
-      - name: Package (Unix)
-        if: runner.os != 'Windows'
-        run: tar -czf ${{ matrix.archive_name }} -C dist sysmon
+      - name: Package .app (macOS)
+        if: runner.os == 'macOS'
+        run: tar -czf sysmon-macos.tar.gz -C dist sysmon.app
 
-      - name: Package (Windows)
+      # ── Linux: .deb package ──
+      - name: Build .deb package (Linux)
+        if: runner.os == 'Linux'
+        run: bash scripts/build-deb.sh ${GITHUB_REF_NAME#v} amd64
+
+      - name: Rename .deb (Linux)
+        if: runner.os == 'Linux'
+        run: mv dist/sysmon_*.deb dist/sysmon-linux.deb
+
+      # ── Windows: .exe ──
+      - name: Build .exe (Windows)
+        if: runner.os == 'Windows'
+        run: pyinstaller --onefile --name sysmon.exe --strip --clean --noconfirm run.py
+
+      - name: Package .exe (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
-        run: Compress-Archive -Path dist\sysmon\* -DestinationPath ${{ matrix.archive_name }}
+        run: Compress-Archive -Path dist\sysmon.exe -DestinationPath sysmon-windows.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.archive_name }}
+          path: |
+            dist/sysmon-macos.tar.gz
+            dist/sysmon-linux.deb
+            dist/sysmon-windows.zip
 
   release:
     needs: build
@@ -69,6 +85,6 @@ jobs:
         with:
           generate_release_notes: true
           files: |
-            artifacts/sysmon-macos-universal2/*.tar.gz
-            artifacts/sysmon-linux-x86_64/*.tar.gz
-            artifacts/sysmon-windows-x86_64/*.zip
+            artifacts/sysmon-macos/sysmon-macos.tar.gz
+            artifacts/sysmon-linux/sysmon-linux.deb
+            artifacts/sysmon-windows/sysmon-windows.zip

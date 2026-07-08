@@ -1,39 +1,38 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+
 a = Analysis(
     ['run.py'],
     pathex=[],
     binaries=[],
     datas=[],
-    hiddenimports=['sysmon_py.darwin', 'sysmon_py.linux', 'sysmon_py.windows'],
+    hiddenimports=[],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['tkinter', 'unittest', 'email', 'html', 'http', 'xml', 'pydoc'],
+    excludes=[],
     noarchive=False,
+    optimize=0,
 )
-
 pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='sysmon',
     debug=False,
     bootloader_ignore_signals=False,
-    strip=False,
-    upx=True,
-    console=True,
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
+    strip=True,
     upx=True,
     upx_exclude=[],
-    name='sysmon',
+    runtime_tmpdir=None,
+    console=True,
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
 )
